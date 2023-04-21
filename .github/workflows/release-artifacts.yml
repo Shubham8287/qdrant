@@ -18,7 +18,7 @@ jobs:
       - name: Install dependencies
         run: |
             sudo apt-get update
-            sudo apt-get install -y gcc-multilib clang cmake protobuf-c
+            sudo apt-get install -y gcc-multilib clang cmake protobuf-compiler
       - uses: actions/checkout@v3
       - name: Build and publish
         uses: taiki-e/upload-rust-binary-action@v1
@@ -40,7 +40,7 @@ jobs:
       - name: Install dependencies
         run: |
             brew update
-            brew install gcc llvm cmake protobuf-compiler
+            brew install gcc llvm cmake protobuf-c
       - uses: actions/checkout@v3
       - name: Build and publish
         uses: taiki-e/upload-rust-binary-action@v1
