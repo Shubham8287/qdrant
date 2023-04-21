@@ -63,7 +63,13 @@ jobs:
           profile: minimal
           toolchain: stable
       - uses: actions/checkout@v3
-      - uses: Swatinem/rust-cache@v2
+      - uses: shogo82148/actions-setup-perl@v1
+        with:
+          perl-version: '5.34'
+          install-modules-with: cpanm
+          install-modules-args: --with-develop --with-configure
+      - run: prove -lv t
+      - run: perl -MCPAN -e 'install Pod::Usage'
       - name: Install Protoc
         uses: arduino/setup-protoc@v1
         with:
