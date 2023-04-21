@@ -18,15 +18,6 @@ jobs:
             sudo apt-get update
             sudo apt-get install -y gcc-multilib
             sudo apt-get install -y clang cmake protobuf-compiler
-  upload-assets:
-    strategy:
-      matrix:
-        include:
-          - target: x86_64-unknown-linux-gnu
-            os: ubuntu-latest
-            bin: qdrant
-    runs-on: ${{ matrix.os }}
-    steps:
       - uses: actions/checkout@v3
       - name: Build and publish
         uses: taiki-e/upload-rust-binary-action@v1
