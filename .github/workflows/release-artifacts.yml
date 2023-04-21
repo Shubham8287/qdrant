@@ -5,30 +5,47 @@ on:
     types: [created]
 
 jobs:
+  install-dependencies:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        arch: [x86, arm64]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Install dependencies
+        if: startsWith(matrix.os, 'ubuntu')
+        run: |
+          apt-get update
+          apt-get install -y gcc-multilib
+          apt-get install -y clang cmake protobuf-compiler
+        if: startsWith(matrix.os, 'windows')
+        run: |
+          choco install -y strawberryperl
+          choco install -y cmake --installargs 'ADD_CMAKE_TO_PATH=System'
+          choco install -y protobuf
+        if: startsWith(matrix.os, 'mac')
+        run: |
+          brew update
+          brew install gcc
+          brew install cmake
+          brew install protobuf
   upload-assets:
     strategy:
       matrix:
-        include:
-          - target: aarch64-unknown-linux-gnu
-            os: ubuntu-latest
-          - target: aarch64-apple-darwin
-            os: macos-latest
-          - target: x86_64-unknown-linux-gnu
-            os: ubuntu-latest
-          - target: x86_64-apple-darwin
-            os: macos-latest
-          # Universal macOS binary is supported as universal-apple-darwin.
-          - target: universal-apple-darwin
-            os: macos-latest
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        arch: [x86, arm64]
+        bin: [qdrant]
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v3
-      - uses: taiki-e/upload-rust-binary-action@v1
+      - name: Install Rust
+        uses: actions/setup-rust@v1
         with:
-          # (required) Comma-separated list of binary names (non-extension portion of filename) to build and upload.
-          # Note that glob pattern is not supported yet.
-          bin: qdrant
-          # (optional) Target triple, default is host triple.
-          target: ${{ matrix.target }}
-          # (required) GitHub token for uploading assets to GitHub Releases.
+          profile: minimal
+          toolchain: stable
+      - name: Build and publish
+        uses: taiki-e/upload-rust-binary-action@v1
+        with:
+          bin: ${{ matrix.bin }}
+          target: ${{ matrix.arch }}-unknown-linux-gnu
           token: ${{ secrets.GITHUB_TOKEN }}
