@@ -63,18 +63,11 @@ jobs:
           profile: minimal
           toolchain: stable
       - uses: actions/checkout@v3
-      - uses: shogo82148/actions-setup-perl@v1
-        with:
-          perl-version: '5.34'
-          install-modules-with: cpanm
-          install-modules-args: --with-develop --with-configure
-      - run: perl -MCPAN -e 'install Pod::Usage'
+      - uses: Swatinem/rust-cache@v2
       - name: Install Protoc
         uses: arduino/setup-protoc@v1
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
-      - name: Set up perl
-        uses: shogo82148/actions-setup-perl@v1
       - name: Build and publish
         uses: taiki-e/upload-rust-binary-action@v1
         with:
