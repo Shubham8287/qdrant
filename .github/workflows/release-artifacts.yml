@@ -22,6 +22,6 @@ jobs:
       - name: Build and publish
         uses: taiki-e/upload-rust-binary-action@v1
         with:
-          bin: ${{ matrix.bin }}
+          bin: qdrant
           target: ${{ matrix.target }}
           token: ${{ secrets.GITHUB_TOKEN }}
