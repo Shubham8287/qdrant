@@ -14,9 +14,9 @@ jobs:
     steps:
       - name: Install dependencies
         run: |
-            apt-get update
-            apt-get install -y gcc-multilib
-            apt-get install -y clang cmake protobuf-compiler
+            sudo apt-get update
+            sudo apt-get install -y gcc-multilib
+            sudo apt-get install -y clang cmake protobuf-compiler
   upload-assets:
     strategy:
       matrix:
