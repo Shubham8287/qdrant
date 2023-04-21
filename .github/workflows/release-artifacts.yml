@@ -68,6 +68,11 @@ jobs:
         uses: arduino/setup-protoc@v1
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Set up perl
+        uses: shogo82148/actions-setup-perl@v1
+      - run: perl -V
+      - run: cpanm --installdeps .
+      - run: prove -lv t
       - name: Build and publish
         uses: taiki-e/upload-rust-binary-action@v1
         with:
