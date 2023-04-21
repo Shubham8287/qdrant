@@ -8,40 +8,24 @@ jobs:
   install-dependencies:
     strategy:
       matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
+        os: [ubuntu-latest]
         arch: [x86, arm64]
     runs-on: ${{ matrix.os }}
     steps:
       - name: Install dependencies
         run: |
-          if [[ "${matrix.os}" == "ubuntu"* ]]; then
             apt-get update
             apt-get install -y gcc-multilib
             apt-get install -y clang cmake protobuf-compiler
-          elif [[ "${matrix.os}" == "windows"* ]]; then
-            choco install -y strawberryperl
-            choco install -y cmake --installargs 'ADD_CMAKE_TO_PATH=System'
-            choco install -y protobuf
-          elif [[ "${matrix.os}" == "mac"* ]]; then
-            brew update
-            brew install gcc
-            brew install cmake
-            brew install protobuf
-          fi
   upload-assets:
     strategy:
       matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
+        os: [ubuntu-latest]
         arch: [x86, arm64]
         bin: [qdrant]
     runs-on: ${{ matrix.os }}
     steps:
-      - uses: actions/checkout@v3
-      - name: Install Rust
-        uses: actions/setup-rust@v1
-        with:
-          profile: minimal
-          toolchain: stable
+      - uses: actions/checkout@v3e
       - name: Build and publish
         uses: taiki-e/upload-rust-binary-action@v1
         with:
