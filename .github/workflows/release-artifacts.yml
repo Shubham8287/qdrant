@@ -8,8 +8,9 @@ jobs:
   install-dependencies:
     strategy:
       matrix:
-        os: [ubuntu-latest]
-        arch: [x86, arm64]
+        include:
+          - target: x86_64-unknown-linux-gnu
+            os: ubuntu-latest
     runs-on: ${{ matrix.os }}
     steps:
       - name: Install dependencies
@@ -20,9 +21,10 @@ jobs:
   upload-assets:
     strategy:
       matrix:
-        os: [ubuntu-latest]
-        arch: [x86, arm64]
-        bin: [qdrant]
+        include:
+          - target: x86_64-unknown-linux-gnu
+            os: ubuntu-latest
+            bin: qdrant
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v3
@@ -30,5 +32,5 @@ jobs:
         uses: taiki-e/upload-rust-binary-action@v1
         with:
           bin: ${{ matrix.bin }}
-          target: ${{ matrix.arch }}-unknown-linux-gnu
+          target: ${{ matrix.target }}
           token: ${{ secrets.GITHUB_TOKEN }}
