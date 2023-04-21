@@ -2,6 +2,7 @@ name: Build and publish release packages
 permissions:
   contents: write
 on:
+  workflow_dispatch:
   release:
     types: [created]
 
@@ -39,7 +40,7 @@ jobs:
       - name: Install dependencies
         run: |
             brew update
-            brew install gcc clang cmake protobuf-compiler
+            brew install gcc llvm cmake protobuf-compiler
       - uses: actions/checkout@v3
       - name: Build and publish
         uses: taiki-e/upload-rust-binary-action@v1
