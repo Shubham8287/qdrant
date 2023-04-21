@@ -39,7 +39,7 @@ jobs:
       - name: Install dependencies
         run: |
             brew update
-            bew install -y gcc-multilib clang cmake protobuf-compiler
+            brew install -y gcc-multilib clang cmake protobuf-compiler
       - uses: actions/checkout@v3
       - name: Build and publish
         uses: taiki-e/upload-rust-binary-action@v1
@@ -48,22 +48,22 @@ jobs:
           target: ${{ matrix.target }}
           token: ${{ secrets.GITHUB_TOKEN }}
 
-  build-windows-binaries:
-    strategy:
-      matrix:
-        include:
-          - target: x86_64-pc-windows-gnu
-            os: windows-latest
-    runs-on: ${{ matrix.os }}
-    steps:
-      - name: Install dependencies
-        run: |
-            choco update
-            choco install -y gcc-multilib clang cmake protobuf-compiler
-      - uses: actions/checkout@v3
-      - name: Build and publish
-        uses: taiki-e/upload-rust-binary-action@v1
-        with:
-          bin: qdrant
-          target: ${{ matrix.target }}
-          token: ${{ secrets.GITHUB_TOKEN }}
+#   build-windows-binaries:
+#     strategy:
+#       matrix:
+#         include:
+#           - target: x86_64-pc-windows-gnu
+#             os: windows-latest
+#     runs-on: ${{ matrix.os }}
+#     steps:
+#       - name: Install dependencies
+#         run: |
+#             choco update
+#             choco install -y gcc-multilib clang cmake protobuf-compiler
+#       - uses: actions/checkout@v3
+#       - name: Build and publish
+#         uses: taiki-e/upload-rust-binary-action@v1
+#         with:
+#           bin: qdrant
+#           target: ${{ matrix.target }}
+#           token: ${{ secrets.GITHUB_TOKEN }}
