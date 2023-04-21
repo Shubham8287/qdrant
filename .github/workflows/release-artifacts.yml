@@ -49,22 +49,28 @@ jobs:
           target: ${{ matrix.target }}
           token: ${{ secrets.GITHUB_TOKEN }}
 
-#   build-windows-binaries:
-#     strategy:
-#       matrix:
-#         include:
-#           - target: x86_64-pc-windows-gnu
-#             os: windows-latest
-#     runs-on: ${{ matrix.os }}
-#     steps:
-#       - name: Install dependencies
-#         run: |
-#             choco update
-#             choco install -n gcc-multilib clang cmake protobuf-compiler
-#       - uses: actions/checkout@v3
-#       - name: Build and publish
-#         uses: taiki-e/upload-rust-binary-action@v1
-#         with:
-#           bin: qdrant
-#           target: ${{ matrix.target }}
-#           token: ${{ secrets.GITHUB_TOKEN }}
+  build-windows-binaries:
+    strategy:
+      matrix:
+        include:
+          - target: x86_64-pc-windows-gnu
+            os: windows-latest
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Install minimal stable
+        uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          toolchain: stable
+      - uses: actions/checkout@v3
+      - uses: Swatinem/rust-cache@v2
+      - name: Install Protoc
+        uses: arduino/setup-protoc@v1
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Build and publish
+        uses: taiki-e/upload-rust-binary-action@v1
+        with:
+          bin: qdrant
+          target: ${{ matrix.target }}
+          token: ${{ secrets.GITHUB_TOKEN }}
