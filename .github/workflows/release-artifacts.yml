@@ -1,0 +1,70 @@
+name: Build and publish release packages
+permissions:
+  contents: write
+on:
+  workflow_dispatch:
+  release:
+    types: [created]
+
+jobs:
+  build-linux-binaries:
+    strategy:
+      matrix:
+        include:
+          - target: x86_64-unknown-linux-gnu
+            os: ubuntu-latest
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Install dependencies
+        run: |
+            sudo apt-get update
+            sudo apt-get install -y gcc-multilib clang cmake protobuf-compiler
+      - uses: actions/checkout@v3
+      - name: Build and publish
+        uses: taiki-e/upload-rust-binary-action@v1
+        with:
+          bin: qdrant
+          target: ${{ matrix.target }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+  build-mac-binaries:
+    strategy:
+      matrix:
+        include:
+          - target: x86_64-apple-darwin
+            os: macos-latest
+          - target: aarch64-apple-darwin
+            os: macos-latest
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Install dependencies
+        run: |
+            brew update
+            brew install gcc llvm cmake protobuf-compiler
+      - uses: actions/checkout@v3
+      - name: Build and publish
+        uses: taiki-e/upload-rust-binary-action@v1
+        with:
+          bin: qdrant
+          target: ${{ matrix.target }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+#   build-windows-binaries:
+#     strategy:
+#       matrix:
+#         include:
+#           - target: x86_64-pc-windows-gnu
+#             os: windows-latest
+#     runs-on: ${{ matrix.os }}
+#     steps:
+#       - name: Install dependencies
+#         run: |
+#             choco update
+#             choco install -n gcc-multilib clang cmake protobuf-compiler
+#       - uses: actions/checkout@v3
+#       - name: Build and publish
+#         uses: taiki-e/upload-rust-binary-action@v1
+#         with:
+#           bin: qdrant
+#           target: ${{ matrix.target }}
+#           token: ${{ secrets.GITHUB_TOKEN }}
