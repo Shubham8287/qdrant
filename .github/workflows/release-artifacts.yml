@@ -39,7 +39,7 @@ jobs:
       - name: Install dependencies
         run: |
             brew update
-            brew install -y gcc-multilib clang cmake protobuf-compiler
+            brew install gcc-multilib clang cmake protobuf-compiler
       - uses: actions/checkout@v3
       - name: Build and publish
         uses: taiki-e/upload-rust-binary-action@v1
@@ -59,7 +59,7 @@ jobs:
 #       - name: Install dependencies
 #         run: |
 #             choco update
-#             choco install -y gcc-multilib clang cmake protobuf-compiler
+#             choco install -n gcc-multilib clang cmake protobuf-compiler
 #       - uses: actions/checkout@v3
 #       - name: Build and publish
 #         uses: taiki-e/upload-rust-binary-action@v1
