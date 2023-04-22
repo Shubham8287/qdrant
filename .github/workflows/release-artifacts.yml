@@ -53,8 +53,7 @@ jobs:
     strategy:
       matrix:
         include:
-          - target: x86_64-pc-windows-gnu
-            os: windows-latest
+          - os: windows-latest
     runs-on: ${{ matrix.os }}
     steps:
       - name: Install minimal stable
