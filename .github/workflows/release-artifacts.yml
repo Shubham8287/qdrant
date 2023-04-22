@@ -2,7 +2,6 @@ name: Build and publish release packages
 permissions:
   contents: write
 on:
-  workflow_dispatch:
   release:
     types: [created]
 
@@ -48,13 +47,12 @@ jobs:
           bin: qdrant
           target: ${{ matrix.target }}
           token: ${{ secrets.GITHUB_TOKEN }}
-
+          
   build-windows-binaries:
     strategy:
       matrix:
         include:
-          - target: x86_64-pc-windows-gnu
-            os: windows-latest
+          - os: windows-latest
     runs-on: ${{ matrix.os }}
     steps:
       - name: Install minimal stable
@@ -70,11 +68,10 @@ jobs:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           
       - name: Build
-        run: cargo build --release --target ${{ matrix.target }} --locked
+        run: cargo build --release --locked
         
       - name: Build and publish
         uses: taiki-e/upload-rust-binary-action@v1
         with:
           bin: qdrant
           token: ${{ secrets.GITHUB_TOKEN }}
-          target: ${{ matrix.target }}
