@@ -49,7 +49,7 @@ jobs:
         - name: configure Cross.toml
           run: |
               echo -e "[target.aarch64-unknown-linux-gnu]\npre-build = \"./dependency.sh\"" >> ./Cross.toml
-              echo -e "apt-get install -y gcc-aarch64-linux-gnu llvm-dev clang cmake protobuf-compiler" > ./dependency.sh
+              echo -e "apt-get update; apt-get install -y gcc-aarch64-linux-gnu llvm-dev libclang-dev clang cmake protobuf-compiler" > ./dependency.sh
               chmod 777 ./dependency.sh
           shell: bash    
         - name: Build
