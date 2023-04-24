@@ -49,9 +49,9 @@ jobs:
         - name: configure Cross.toml
           run: |
               echo -e "[target.aarch64-unknown-linux-gnu]\npre-build = \"./dependency.sh\"" >> ./Cross.toml
-              echo -e "sudo apt-get install -y gcc-multilib llvm-dev clang cmake protobuf-compiler" > ./dependency.sh
+              echo -e "apt-get install -y gcc-multilib llvm-dev clang cmake protobuf-compiler" > ./dependency.sh
               chmod 777 ./dependency.sh
-              
+          shell: bash    
         - name: Build
           run: cross build --release --target ${{ matrix.target }}
         - uses: taiki-e/upload-rust-binary-action@v1
