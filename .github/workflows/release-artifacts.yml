@@ -12,6 +12,8 @@ jobs:
         include:
           - target: x86_64-unknown-linux-gnu
             os: ubuntu-latest
+          - target: aarch64-unknown-linux-gnu
+            os: ubuntu-latest
     runs-on: ${{ matrix.os }}
     steps:
       - name: Install dependencies
@@ -53,6 +55,7 @@ jobs:
       matrix:
         include:
           - os: windows-latest
+            target: x86_64-pc-windows-msvc.
     runs-on: ${{ matrix.os }}
     steps:
       - name: Install minimal stable
@@ -67,11 +70,10 @@ jobs:
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           
-      - name: Build
-        run: cargo build --release --locked
         
       - name: Build and publish
         uses: taiki-e/upload-rust-binary-action@v1
         with:
           bin: qdrant
           token: ${{ secrets.GITHUB_TOKEN }}
+          target: ${{ matrix.target }}
