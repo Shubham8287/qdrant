@@ -42,14 +42,15 @@ jobs:
           with:
             toolchain: stable
             target: ${{ matrix.target }}
-        - name: Install dependencies
-          run: |
-              sudo apt-get update
-              sudo apt-get install -y gcc-multilib llvm llvm-dev libclang-dev clang cmake protobuf-compiler
         - uses: actions/checkout@v3
         - name: Install cross
           run: cargo install cross
           shell: bash
+        - name: configure Cross.toml
+          run: |
+              echo -e "[target.aarch64-unknown-linux-gnu]\npre-build = ./dependency.sh" >> ./Cross.toml
+              echo -e "sudo apt-get install -y gcc-multilib llvm-dev clang cmake protobuf-compiler" > ./dependency.sh
+              
         - name: Build
           run: cross build --release --target ${{ matrix.target }} --build-args="sudo apt-get install -y gcc-multilib llvm llvm-dev libclang-dev clang cmake protobuf-compiler"
         - name: Build and publish
