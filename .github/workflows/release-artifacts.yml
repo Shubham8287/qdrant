@@ -21,6 +21,8 @@ jobs:
             sudo apt-get update
             sudo apt-get install -y gcc-multilib llvm llvm-dev libclang-dev clang cmake protobuf-compiler
       - uses: actions/checkout@v3
+      - name: Build
+        run: cargo build --release --target ${{ matrix.target }}
       - name: Build and publish
         uses: taiki-e/upload-rust-binary-action@v1
         with:
@@ -55,7 +57,6 @@ jobs:
       matrix:
         include:
           - os: windows-latest
-            target: x86_64-pc-windows-msvc
     runs-on: ${{ matrix.os }}
     steps:
       - name: Install minimal stable
@@ -76,4 +77,3 @@ jobs:
         with:
           bin: qdrant
           token: ${{ secrets.GITHUB_TOKEN }}
-          target: ${{ matrix.target }}
